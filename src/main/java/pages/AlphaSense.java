@@ -7,21 +7,19 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class AlphaSense {
 
     private final WebDriverWait wait;
-    private WebDriver driver;
-
     private final JavascriptExecutor js;
-    private WebElement element;
     private final Actions actions;
 
 
     public AlphaSense(WebDriver driver) {
         long timeout = 15;
         wait = new WebDriverWait(driver, Duration.ofSeconds(timeout));
-        this.driver = driver;
         js = (JavascriptExecutor) driver;
         actions = new Actions(driver);
         if (!driver.getTitle().equals("AlphaSense")) {
@@ -31,18 +29,17 @@ public class AlphaSense {
     }
 
     By searchBox = By.cssSelector("[data-location=CustomSearchBox]");
-    By searchTitleHit = By.xpath("//div[./span[text()='TITLE HIT']]");
+    By searchResults = By.cssSelector("[role=rowgroup] > div");
+    By highLightedElement = By.cssSelector("span[class='hl']");
 
-    By searchResults = By.cssSelector("[role=rowgroup]");
-    By testElement = By.xpath("//*[@role='rowgroup']//*[contains(text(), 'Logo -')]");
-    By searchBlock = By.cssSelector("[options='[object Object]']");
+//    By testElement = By.xpath("//*[@role='rowgroup']//*[contains(text(), 'Logo -')]");
+//    By searchBlock = By.cssSelector("[options='[object Object]']");
+//    By searchTextField = By.cssSelector("#searchInDocument");
+//    By searchTextField_1 = By.xpath("//*[contains(@class, 'CodeMirror-placeholder')]");
+//    By searchTextField_2 = By.xpath("//*[@role='presentation']//span[@role]");
 
-
-    By searchTextField = By.cssSelector("#searchInDocument");
-    By searchTextField_1 = By.xpath("//*[contains(@class, 'CodeMirror-placeholder')]");
-    By searchTextField_2 = By.xpath("//*[@role='presentation']//span[@role]");
-
-
+    By articleFrame = By.cssSelector("#content-1");
+    By textFoundElement = By.cssSelector("span[class*='row-blue']");
 
 
     public void sendTextToSearchBoxAndClick(String text) {
@@ -55,100 +52,99 @@ public class AlphaSense {
         } catch (NoSuchElementException | TimeoutException e) {
             throw new RuntimeException(String.format("Message: %S. Element's locator: '%s'", e, searchBox.toString()));
         }
-        sleep(2000);
     }
 
-    public void scrollToElementAndClick() {
-        List<WebElement> list;
-        try {
-            do {
-                actions.moveToElement(wait.until(ExpectedConditions.elementToBeClickable(searchTitleHit)))
+
+    public WebElement scrollToElementAndClick() {
+            List<WebElement> listOne, listTwo;
+            try {
+                actions.moveToElement(getElementsList(searchResults).get(0))
                         .click()
-                        .sendKeys(Keys.PAGE_DOWN)
                         .build()
                         .perform();
-                list = driver.findElements(testElement);
-                sleep(500);
-            } while (list.isEmpty());
-
-            list.get(0).click();
-
-            sleep(5000);
-
+                do {
+                    listOne = getElementsList(searchResults);
+                    actions.sendKeys(Keys.PAGE_DOWN)
+                            .build()
+                            .perform();
+                    listTwo = getElementsList(searchResults);;
+                    sleep(500);
+                } while (!listOne.equals(listTwo));
+            return listTwo.get(listTwo.size()-1);
         } catch (NoSuchElementException | TimeoutException e) {
-            throw new RuntimeException(String.format("Message: %S. Element's locator: '%s'", e, searchBox.toString()));
+            throw new RuntimeException(String.format("Message: %S. Element's locator: '%s'", e, searchResults.toString()));
         }
     }
 
+    private List<WebElement> getElementsList (By locator) {
+        return wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(locator));
+    }
 
-    public void insertTextToTextField_ (String text) {
+    public List<String> getTextFromFoundElementsInViewer () {
+        List<WebElement> list = getElementsList(textFoundElement);
+        return list.stream()
+                .map(WebElement::getText)
+                .collect(Collectors.toList());
+    }
+
+
+
+    public void clickOnElement (WebElement element) {
+        Objects.requireNonNull(element);
         try {
-            element = wait.until(ExpectedConditions.elementToBeClickable(searchTextField));
-            System.out.println("Text before: " + element.getText());
-            element.sendKeys(text);
-            System.out.println("Text after clearing: " + element.getText());
-
-        } catch (NoSuchElementException | TimeoutException e) {
-            throw new NoSuchElementException(String.format("Element is not found by '%s'", searchTextField.toString()));
+            element.click();
+        } catch (ElementClickInterceptedException | NoSuchElementException e) {
+            throw new RuntimeException(e.toString());
         }
     }
 
-//    public void insertTextToTextField(String text) {
+
+    public String getTextFromChildHighLightedElement (WebElement parent) {
+        Objects.requireNonNull(parent);
+        return parent.findElement(highLightedElement).getText();
+    }
+
+
+//    public void insertTextToTextFieldJS(String text) {
 //        try {
-//            element = wait.until(ExpectedConditions.elementToBeClickable(searchTextField_1));
-//            System.out.println("Text before: " + element.getText());
-//            element.clear();
-//            System.out.println("Text after clearing: " + element.getText());
+//            //JS click and type text
+//            element = wait.until(ExpectedConditions.elementToBeClickable(searchTextField_2));
+//            js.executeScript("arguments[0].click();", element);
+//            js.executeScript("document.querySelector('[role=presentation] span[role]').value = 'AlphaSense'");
+//            js.executeScript("arguments[0].click();", element);
+//            Thread.sleep(10000);
+//        } catch (NoSuchElementException | TimeoutException | InterruptedException e) {
+//            throw new NoSuchElementException(String.format("Element is not found by '%s'", searchTextField_2.toString()));
+//        }
+//    }
 //
-//            WebElement element2 = wait.until(ExpectedConditions.elementToBeClickable(searchTextField_2));
-//            System.out.println("Text before: " + element2.getText());
-//            element2.sendKeys(text);
-//            System.out.println("Text after typing: " + element2.getText());
+//    public void insertTextToTextFieldJS2(String text) {
+//        try {
+//            element = wait.until(ExpectedConditions.visibilityOfElementLocated(searchTextField_1));
+//            System.out.println("Text before: " + element.getText());
+//            js.executeScript("arguments[0].click();", element);
+//            js.executeScript("document.querySelector('[role=presentation] span[role]').value='" + text + "'");
+//
+////            js.executeScript("document.querySelector('.fusion-custom-menu-item-contents .s').value = 'SW Test Academy'");
+//
+//
+//            System.out.println("Text after: " + element.getText());
+//
 //        } catch (NoSuchElementException | TimeoutException e) {
 //            throw new NoSuchElementException(String.format("Element is not found by '%s'", searchTextField_1.toString()));
 //        }
 //    }
-
-    public void insertTextToTextFieldJS(String text) {
-        try {
-            //JS click and type text
-            element = wait.until(ExpectedConditions.elementToBeClickable(searchTextField_2));
-            js.executeScript("arguments[0].click();", element);
-            js.executeScript("document.querySelector('[role=presentation] span[role]').value = 'AlphaSense'");
-            js.executeScript("arguments[0].click();", element);
-            Thread.sleep(10000);
-        } catch (NoSuchElementException | TimeoutException | InterruptedException e) {
-            throw new NoSuchElementException(String.format("Element is not found by '%s'", searchTextField_2.toString()));
-        }
-    }
-
-    public void insertTextToTextFieldJS2(String text) {
-        try {
-            element = wait.until(ExpectedConditions.visibilityOfElementLocated(searchTextField_1));
-            System.out.println("Text before: " + element.getText());
-            js.executeScript("arguments[0].click();", element);
-            js.executeScript("document.querySelector('[role=presentation] span[role]').value='" + text + "'");
-
-//            js.executeScript("document.querySelector('.fusion-custom-menu-item-contents .s').value = 'SW Test Academy'");
-
-
-            System.out.println("Text after: " + element.getText());
-
-        } catch (NoSuchElementException | TimeoutException e) {
-            throw new NoSuchElementException(String.format("Element is not found by '%s'", searchTextField_1.toString()));
-        }
-    }
-
-
-
-    public void getPageTitle (WebDriver driver) {
-        System.out.println(driver.getTitle());
-    }
-
-    public void getTextFromElement () {
-        element = wait.until(ExpectedConditions.visibilityOfElementLocated(searchTextField_1));
-        System.out.println("Text issss: " + element.getText());
-    }
+//
+//
+//
+//    public void getPageTitle (WebDriver driver) {
+//        System.out.println(driver.getTitle());
+//    }
+//
+//    public void getTextFromElement () {
+//        element = wait.until(ExpectedConditions.visibilityOfElementLocated(searchTextField_1));
+//        System.out.println("Text issss: " + element.getText());
+//    }
 
     private void sleep (int timeout) {
         try {

@@ -1,6 +1,7 @@
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.*;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import pages.AlphaSense;
@@ -36,9 +37,15 @@ public class AlphaSensePageTest {
 
     @Test
     public void getTitle () {
+        String expectedText;
+        WebElement theLastElement;
         AlphaSense alphaSense = new AlphaSense(driver);
+
         alphaSense.sendTextToSearchBoxAndClick("AlphaSense");
-        alphaSense.scrollToElementAndClick();
+        theLastElement = alphaSense.scrollToElementAndClick();
+        expectedText = alphaSense.getTextFromChildHighLightedElement(theLastElement);
+        alphaSense.clickOnElement(theLastElement);
+//        Assert.assertTrue(alphaSense.getTextFromFoundElementsInViewer().contains(expectedText));
     }
 
 }
