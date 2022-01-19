@@ -6,18 +6,22 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.List;
 
 public class AlphaSense {
 
     private final WebDriverWait wait;
+    private WebDriver driver;
+
     private final JavascriptExecutor js;
-    private final long timeout = 10;
     private WebElement element;
     private final Actions actions;
 
 
     public AlphaSense(WebDriver driver) {
+        long timeout = 15;
         wait = new WebDriverWait(driver, Duration.ofSeconds(timeout));
+        this.driver = driver;
         js = (JavascriptExecutor) driver;
         actions = new Actions(driver);
         if (!driver.getTitle().equals("AlphaSense")) {
@@ -27,7 +31,11 @@ public class AlphaSense {
     }
 
     By searchBox = By.cssSelector("[data-location=CustomSearchBox]");
+    By searchTitleHit = By.xpath("//div[./span[text()='TITLE HIT']]");
+
     By searchResults = By.cssSelector("[role=rowgroup]");
+    By testElement = By.xpath("//*[@role='rowgroup']//*[contains(text(), 'Logo -')]");
+    By searchBlock = By.cssSelector("[options='[object Object]']");
 
 
     By searchTextField = By.cssSelector("#searchInDocument");
@@ -47,10 +55,28 @@ public class AlphaSense {
         } catch (NoSuchElementException | TimeoutException e) {
             throw new RuntimeException(String.format("Message: %S. Element's locator: '%s'", e, searchBox.toString()));
         }
+        sleep(2000);
+    }
+
+    public void scrollToElementAndClick() {
+        List<WebElement> list;
         try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+            do {
+                actions.moveToElement(wait.until(ExpectedConditions.elementToBeClickable(searchTitleHit)))
+                        .click()
+                        .sendKeys(Keys.PAGE_DOWN)
+                        .build()
+                        .perform();
+                list = driver.findElements(testElement);
+                sleep(500);
+            } while (list.isEmpty());
+
+            list.get(0).click();
+
+            sleep(5000);
+
+        } catch (NoSuchElementException | TimeoutException e) {
+            throw new RuntimeException(String.format("Message: %S. Element's locator: '%s'", e, searchBox.toString()));
         }
     }
 
@@ -122,6 +148,14 @@ public class AlphaSense {
     public void getTextFromElement () {
         element = wait.until(ExpectedConditions.visibilityOfElementLocated(searchTextField_1));
         System.out.println("Text issss: " + element.getText());
+    }
+
+    private void sleep (int timeout) {
+        try {
+            Thread.sleep(timeout);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
 

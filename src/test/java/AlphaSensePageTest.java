@@ -2,11 +2,16 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.*;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import pages.AlphaSense;
+
+import java.time.Duration;
 
 public class AlphaSensePageTest {
 
-    private WebDriver driver;
+    private static WebDriver driver;
+    private WebDriverWait wait;
+
 
     @BeforeClass
     public static void beforeClass() {
@@ -21,8 +26,8 @@ public class AlphaSensePageTest {
         driver.get(url);
     }
 
-    @After
-    public void afterTest() {
+    @AfterClass
+    public static void afterTest() {
         driver.manage().deleteAllCookies();
         driver.quit();
     }
@@ -33,6 +38,7 @@ public class AlphaSensePageTest {
     public void getTitle () {
         AlphaSense alphaSense = new AlphaSense(driver);
         alphaSense.sendTextToSearchBoxAndClick("AlphaSense");
+        alphaSense.scrollToElementAndClick();
     }
 
 }
