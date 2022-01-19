@@ -6,7 +6,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import pages.AlphaSense;
 
-import java.time.Duration;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class AlphaSensePageTest {
 
@@ -36,16 +36,23 @@ public class AlphaSensePageTest {
 
 
     @Test
-    public void getTitle () {
+    public void checkTheSearchResult () {
         String expectedText;
         WebElement theLastElement;
         AlphaSense alphaSense = new AlphaSense(driver);
 
+        //get the search results
         alphaSense.sendTextToSearchBoxAndClick("AlphaSense");
-        theLastElement = alphaSense.scrollToElementAndClick();
+        //get the last element from searchList
+        theLastElement = alphaSense.scrollToTheLastElement();
+        //get the last element's text
         expectedText = alphaSense.getTextFromChildHighLightedElement(theLastElement);
+        //click the last element to view some results
         alphaSense.clickOnElement(theLastElement);
-//        Assert.assertTrue(alphaSense.getTextFromFoundElementsInViewer().contains(expectedText));
+        //switch to result document's frame
+        alphaSense.switchToFrame();
+        //assert that the expected text is highlighted
+        assertThat(alphaSense.getTextFromFoundElementsInViewer()).anyMatch(a -> a.contains(expectedText));
     }
 
 }

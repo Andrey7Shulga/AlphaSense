@@ -12,35 +12,26 @@ import java.util.stream.Collectors;
 
 public class AlphaSense {
 
+    private final WebDriver driver;
     private final WebDriverWait wait;
-    private final JavascriptExecutor js;
     private final Actions actions;
 
+    private final By searchBox = By.cssSelector("[data-location=CustomSearchBox]");
+    private final By searchResults = By.cssSelector("[role=rowgroup] > div");
+    private final By highLightedElement = By.cssSelector("span[class='hl']");
+    private final By articleFrame = By.cssSelector("#content-1");
+    private final By textFoundElement = By.cssSelector("span[class*='row-blue']");
 
     public AlphaSense(WebDriver driver) {
         long timeout = 15;
+        this.driver = driver;
         wait = new WebDriverWait(driver, Duration.ofSeconds(timeout));
-        js = (JavascriptExecutor) driver;
         actions = new Actions(driver);
         if (!driver.getTitle().equals("AlphaSense")) {
             throw new IllegalStateException("The loaded page is not Alpha Sense required Page," +
                     " current page title is: " + driver.getTitle());
         }
     }
-
-    By searchBox = By.cssSelector("[data-location=CustomSearchBox]");
-    By searchResults = By.cssSelector("[role=rowgroup] > div");
-    By highLightedElement = By.cssSelector("span[class='hl']");
-
-//    By testElement = By.xpath("//*[@role='rowgroup']//*[contains(text(), 'Logo -')]");
-//    By searchBlock = By.cssSelector("[options='[object Object]']");
-//    By searchTextField = By.cssSelector("#searchInDocument");
-//    By searchTextField_1 = By.xpath("//*[contains(@class, 'CodeMirror-placeholder')]");
-//    By searchTextField_2 = By.xpath("//*[@role='presentation']//span[@role]");
-
-    By articleFrame = By.cssSelector("#content-1");
-    By textFoundElement = By.cssSelector("span[class*='row-blue']");
-
 
     public void sendTextToSearchBoxAndClick(String text) {
         try {
@@ -54,8 +45,13 @@ public class AlphaSense {
         }
     }
 
+    public void switchToFrame () {
+        WebElement iFrame = wait.until(ExpectedConditions.presenceOfElementLocated(articleFrame));
+        driver.switchTo().frame(iFrame);
+    }
 
-    public WebElement scrollToElementAndClick() {
+
+    public WebElement scrollToTheLastElement() {
             List<WebElement> listOne, listTwo;
             try {
                 actions.moveToElement(getElementsList(searchResults).get(0))
@@ -77,17 +73,20 @@ public class AlphaSense {
     }
 
     private List<WebElement> getElementsList (By locator) {
-        return wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(locator));
+        return wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(locator));
     }
 
     public List<String> getTextFromFoundElementsInViewer () {
         List<WebElement> list = getElementsList(textFoundElement);
-        return list.stream()
+
+        List<String> alist = list.stream()
                 .map(WebElement::getText)
                 .collect(Collectors.toList());
+        for (String a : alist) {
+            System.out.println("Найденный текст: " + a);
+        }
+        return alist;
     }
-
-
 
     public void clickOnElement (WebElement element) {
         Objects.requireNonNull(element);
@@ -98,53 +97,10 @@ public class AlphaSense {
         }
     }
 
-
     public String getTextFromChildHighLightedElement (WebElement parent) {
         Objects.requireNonNull(parent);
         return parent.findElement(highLightedElement).getText();
     }
-
-
-//    public void insertTextToTextFieldJS(String text) {
-//        try {
-//            //JS click and type text
-//            element = wait.until(ExpectedConditions.elementToBeClickable(searchTextField_2));
-//            js.executeScript("arguments[0].click();", element);
-//            js.executeScript("document.querySelector('[role=presentation] span[role]').value = 'AlphaSense'");
-//            js.executeScript("arguments[0].click();", element);
-//            Thread.sleep(10000);
-//        } catch (NoSuchElementException | TimeoutException | InterruptedException e) {
-//            throw new NoSuchElementException(String.format("Element is not found by '%s'", searchTextField_2.toString()));
-//        }
-//    }
-//
-//    public void insertTextToTextFieldJS2(String text) {
-//        try {
-//            element = wait.until(ExpectedConditions.visibilityOfElementLocated(searchTextField_1));
-//            System.out.println("Text before: " + element.getText());
-//            js.executeScript("arguments[0].click();", element);
-//            js.executeScript("document.querySelector('[role=presentation] span[role]').value='" + text + "'");
-//
-////            js.executeScript("document.querySelector('.fusion-custom-menu-item-contents .s').value = 'SW Test Academy'");
-//
-//
-//            System.out.println("Text after: " + element.getText());
-//
-//        } catch (NoSuchElementException | TimeoutException e) {
-//            throw new NoSuchElementException(String.format("Element is not found by '%s'", searchTextField_1.toString()));
-//        }
-//    }
-//
-//
-//
-//    public void getPageTitle (WebDriver driver) {
-//        System.out.println(driver.getTitle());
-//    }
-//
-//    public void getTextFromElement () {
-//        element = wait.until(ExpectedConditions.visibilityOfElementLocated(searchTextField_1));
-//        System.out.println("Text issss: " + element.getText());
-//    }
 
     private void sleep (int timeout) {
         try {
