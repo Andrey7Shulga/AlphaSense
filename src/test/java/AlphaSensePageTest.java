@@ -1,3 +1,4 @@
+import config.ConfigReader;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.*;
 import org.openqa.selenium.WebDriver;
@@ -17,6 +18,8 @@ public class AlphaSensePageTest {
     private WebDriverWait wait;
     private UI_Helper uiHelper;
 
+    private final static String TEST_URL = ConfigReader.getInstance().getProperty("testUI_url");
+    private final static String WAIT_TIMEOUT = ConfigReader.getInstance().getProperty("waitTimeOut");
 
     @BeforeClass
     public static void beforeClass() {
@@ -25,12 +28,11 @@ public class AlphaSensePageTest {
 
     @Before
     public void beforeTest() {
-        String url = "https://rc.alpha-sense.com/doc/PR-386ea743f2a90399fb0e4300ddf37d0697abc743";
         driver = new ChromeDriver();
-        wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+        wait = new WebDriverWait(driver, Duration.ofSeconds(Long.parseLong(WAIT_TIMEOUT)));
         driver.manage().window().maximize();
         uiHelper = new UI_Helper(driver, wait);
-        driver.get(url);
+        driver.get(TEST_URL);
     }
 
     @After

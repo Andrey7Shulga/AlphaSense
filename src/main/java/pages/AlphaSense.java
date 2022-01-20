@@ -5,6 +5,8 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import services.UI_Helper;
 
 import java.util.List;
@@ -13,6 +15,7 @@ import java.util.stream.Collectors;
 public class AlphaSense {
 
     private final UI_Helper uiHelper;
+    private static final Logger log = LoggerFactory.getLogger(AlphaSense.class);
 
     public final static By searchBox = By.cssSelector("[data-location=CustomSearchBox]");
     public final static By highLightedElement = By.cssSelector("span[class='hl']");
@@ -44,13 +47,11 @@ public class AlphaSense {
 
     public List<String> getTextFromFoundElementsInViewer () {
         List<WebElement> list = uiHelper.getElementsList(textFoundElement);
-
-        List<String> alist = list.stream()
+        List<String> aList = list.stream()
                 .map(WebElement::getText)
                 .collect(Collectors.toList());
-        for (String a : alist) {
-            System.out.println("Найденный текст: " + a);
-        }
-        return alist;
+
+        aList.forEach(e -> log.info("Viewer's text found: '{}'", e));
+        return aList;
     }
 }

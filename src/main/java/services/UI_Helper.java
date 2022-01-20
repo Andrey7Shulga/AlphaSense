@@ -4,6 +4,8 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Objects;
@@ -13,6 +15,8 @@ public class UI_Helper {
     private final WebDriver driver;
     private final WebDriverWait wait;
     private final Actions actions;
+    private static final Logger log = LoggerFactory.getLogger(UI_Helper.class);
+
 
     public UI_Helper (WebDriver driver, WebDriverWait wait) {
         this.driver = driver;
@@ -64,8 +68,11 @@ public class UI_Helper {
 
     public String getTextFromChildElement(WebElement parent, By child) {
         Objects.requireNonNull(parent);
+        String text;
         try {
-            return parent.findElement(child).getText();
+            text = parent.findElement(child).getText();
+            log.info("Child element's text found: {}", text);
+            return text;
         } catch (NoSuchElementException e) {
             throw new RuntimeException(String.format("Element is not found. Element's locator: '%s'", child));
         }
