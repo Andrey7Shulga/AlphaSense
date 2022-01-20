@@ -12,7 +12,6 @@ public class UI_Helper {
 
     private final WebDriver driver;
     private final WebDriverWait wait;
-    private WebElement element;
     private final Actions actions;
 
     public UI_Helper (WebDriver driver, WebDriverWait wait) {
@@ -81,7 +80,7 @@ public class UI_Helper {
         }
     }
 
-    public void sleep (int timeout) {
+    public void sleep (long timeout) {
         try {
             Thread.sleep(timeout);
         } catch (InterruptedException e) {
