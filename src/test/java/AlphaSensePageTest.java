@@ -1,6 +1,9 @@
 import config.ConfigReader;
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.junit.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -21,13 +24,13 @@ public class AlphaSensePageTest {
     private final static String TEST_URL = ConfigReader.getInstance().getProperty("testUI_url");
     private final static String WAIT_TIMEOUT = ConfigReader.getInstance().getProperty("waitTimeOut");
 
-    @BeforeClass
-    public static void beforeClass() {
+    @BeforeAll
+    static void beforeClass() {
         WebDriverManager.chromedriver().setup();
     }
 
-    @Before
-    public void beforeTest() {
+    @BeforeEach
+     void beforeTest() {
         driver = new ChromeDriver();
         wait = new WebDriverWait(driver, Duration.ofSeconds(Long.parseLong(WAIT_TIMEOUT)));
         driver.manage().window().maximize();
@@ -35,16 +38,15 @@ public class AlphaSensePageTest {
         driver.get(TEST_URL);
     }
 
-    @After
-    public void afterTest() {
+    @AfterEach
+     void afterTest() {
         driver.manage().deleteAllCookies();
         driver.quit();
     }
 
 
-
     @Test
-    public void checkTheSearchResult () {
+     void checkTheSearchResult () {
         String expectedText;
         WebElement theLastElement;
         AlphaSense alphaSense = new AlphaSense(driver, wait);
