@@ -16,7 +16,7 @@ public class ApiCore {
 
     private static final Logger log = LoggerFactory.getLogger(ApiCore.class);
 
-    public Response getSearchResults(String keyword, String slop, boolean positiveOnly, boolean negativeOnly, String endpoint) {
+    public Response getSearchResults(String keyword, Integer slop, boolean positiveOnly, boolean negativeOnly, String endpoint) {
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
         RequestSpecification requestSpecification = apiServices.RequestSpec.baseRequestSpecJson();
 
