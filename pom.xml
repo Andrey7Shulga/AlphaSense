@@ -18,15 +18,7 @@
         <io.rest-assured.version>4.4.0</io.rest-assured.version>
     </properties>
 
-    <reporting>
-        <plugins>
-            <plugin>
-                <groupId>com.github.spotbugs</groupId>
-                <artifactId>spotbugs-maven-plugin</artifactId>
-                <version>4.1.4</version>
-            </plugin>
-        </plugins>
-    </reporting>
+
 
     <dependencies>
         <dependency>
@@ -123,6 +115,12 @@
             <version>3.22.0</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-java-commons</artifactId>
+            <version>2.17.2</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -190,19 +188,24 @@
                     <artifactId>maven-project-info-reports-plugin</artifactId>
                     <version>3.1.1</version>
                 </plugin>
-                <plugin>
-                    <groupId>io.qameta.allure</groupId>
-                    <artifactId>allure-maven</artifactId>
-                    <version>2.10.0</version>
-                    <!--configuration>
-                        <reportVersion>2.4.1</reportVersion>
-                    </configuration-->
-                </plugin>
             </plugins>
         </pluginManagement>
     </build>
 
-
-
+    <reporting>
+        <excludeDefaults>true</excludeDefaults>
+        <plugins>
+            <plugin>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs-maven-plugin</artifactId>
+                <version>4.1.4</version>
+            </plugin>
+            <plugin>
+                <groupId>io.qameta.allure</groupId>
+                <artifactId>allure-maven</artifactId>
+                <version>LATEST</version>
+            </plugin>
+        </plugins>
+    </reporting>
 
 </project>

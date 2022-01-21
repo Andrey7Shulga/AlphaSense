@@ -12,7 +12,7 @@ public class ApiSteps {
     public ApiSteps() {this.apiCore = new ApiCore();}
 
 
-    public Response getSearchingInfo (String keyword, Integer slop, boolean positiveOnly, boolean negativeOnly) {
+    public Response getSearchingInfo (String keyword, Object slop, String positiveOnly, String negativeOnly) {
         return apiCore.getSearchResults(keyword, slop, positiveOnly, negativeOnly, Endpoints.getCurrentDocInfo());
     }
 
