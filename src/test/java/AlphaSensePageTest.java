@@ -21,12 +21,20 @@ public class AlphaSensePageTest {
     private WebDriverWait wait;
     private UI_Helper uiHelper;
 
-    private final static String TEST_URL = ConfigReader.getInstance().getProperty("testUI_url");
+    private static String TEST_URL;
     private final static String WAIT_TIMEOUT = ConfigReader.getInstance().getProperty("waitTimeOut");
 
     @BeforeAll
     static void beforeClass() {
         WebDriverManager.chromedriver().setup();
+        String var = System.getProperty("uriPath");
+
+        //get a proper URL from the system properties
+        StringBuilder UI_URL = new StringBuilder(ConfigReader.getInstance().getProperty("param_uri"))
+                .append(var)
+                .append("/doc/")
+                .append(ConfigReader.getInstance().getProperty("document"));
+        TEST_URL = var == null ? ConfigReader.getInstance().getProperty("testUI_url") : UI_URL.toString();
     }
 
     @BeforeEach
