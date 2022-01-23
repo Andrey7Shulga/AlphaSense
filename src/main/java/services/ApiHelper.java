@@ -23,7 +23,7 @@ public class ApiHelper {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        log.debug("class name: {}", objectList.get(0).getClass().getName());
+        log.info("class name: {}", objectList.get(0).getClass().getName());
         return objectList;
     }
 

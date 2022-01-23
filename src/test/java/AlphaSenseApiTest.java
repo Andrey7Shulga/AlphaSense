@@ -56,7 +56,7 @@ public class AlphaSenseApiTest {
     }
 
     @Test
-    void getKeyWordSearchingInfoToCheckBody_KeyWord () {
+    void getKeyWordSearchingInfoToCheckBody_PositiveAndNagative () {
         String keyWord = "AlphaSense";
 
         JsonNode jsonNode = apiSteps
@@ -77,6 +77,19 @@ public class AlphaSenseApiTest {
                 .isTrue();
     }
 
+    @ParameterizedTest(name = "[{index}] -> ''{0}'', ''{1}''")
+    @DisplayName("PositiveOnly and NegativeOnly combinations")
+    @CsvSource({
+            "false, false, 200",
+            "true, false, 200",
+            "false, true, 200",
+            "true, true, 400"
+    })
+    void checkPositiveAndNegativeCombinations (String positiveOnly, String negativeOnly, Integer code) {
+        Response response = apiSteps.getSearchingInfo("AlphaSense", "15", positiveOnly, negativeOnly);
+        assertThat(response.statusCode()).isEqualTo(code);
+    }
+
     @ParameterizedTest(name = "[{index}] -> ''{0}'', ''{1}'', ''{2}'', ''{3}''")
     @DisplayName("Bad Requests")
     @CsvSource({
@@ -84,16 +97,14 @@ public class AlphaSenseApiTest {
             "AlphaSense, , false, false, 400",
             "AlphaSense, -125874, false, false, 500",
             "AlphaSense, 20.145, false, false, 400",
-
             "AlphaSense, 15, true, true, 400",
             ", , false, false, 400",
             ", , , , 400",
-
-//            "AlphaSense, 15, 1!3, false, 400",
-//            "AlphaSense, 15, false, 123, 400",
-//            "AlphaSense, 15, 123, !, 400",
-//            "AlphaSense, 15, true, @34, 400",
-//            "AlphaSense, 15, 1!3, true, 400",
+            "AlphaSense, 15, 1!3, false, 400",
+            "AlphaSense, 15, false, 123, 400",
+            "AlphaSense, 15, 123, !, 400",
+            "AlphaSense, 15, true, @34, 400",
+            "AlphaSense, 15, 1!3, true, 400",
             "AlphaSense, 15, , , 400",
 
     })
