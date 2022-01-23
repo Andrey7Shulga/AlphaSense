@@ -8,17 +8,21 @@ import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 import static io.restassured.RestAssured.given;
 
 public class ApiCore {
 
     private static final Logger log = LoggerFactory.getLogger(ApiCore.class);
+    private final RequestSpec requestSpec;
+
+    public ApiCore() {
+        requestSpec = new RequestSpec();
+    }
 
     public Response getSearchResults(String keyword, Object slop, String positiveOnly, String negativeOnly, String endpoint) {
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
-        RequestSpecification requestSpecification = apiServices.RequestSpec.baseRequestSpecJson();
+        RequestSpecification requestSpecification = requestSpec.baseRequestSpecJson();
 
         Map<String, Object> query = new HashMap<>();
         query.put("keyword", keyword);

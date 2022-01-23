@@ -1,15 +1,8 @@
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.type.CollectionType;
 import config.ConfigReader;
 import dto.SearchMainInfo;
 import dto.Statements;
-import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
-import junit.framework.Assert;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,8 +11,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 import services.ApiHelper;
 import services.ApiSteps;
 
-import java.io.IOException;
-import java.util.*;
+import java.util.Collection;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -56,11 +48,12 @@ public class AlphaSenseApiTest {
     }
 
     @Test
-    void getKeyWordSearchingInfoToCheckBody_PositiveAndNagative () {
+    @DisplayName("Checking if any search result has a keyWord")
+    void getKeyWordSearchingInfoToCheckBodyForKeyWord () {
         String keyWord = "AlphaSense";
 
         JsonNode jsonNode = apiSteps
-                .getSearchingInfo("AlphaSense", 15, "false", "false")
+                .getSearchingInfo(keyWord, 15, "false", "false")
                 .as(JsonNode.class).at("/searchResults/statements");
 
         //derive a desirable collection
@@ -106,7 +99,6 @@ public class AlphaSenseApiTest {
             "AlphaSense, 15, true, @34, 400",
             "AlphaSense, 15, 1!3, true, 400",
             "AlphaSense, 15, , , 400",
-
     })
     void sendBadRequestToCheckStatusCode (String keyword, Object slop, String positiveOnly, String negativeOnly, Integer code) {
         Response response = apiSteps.getSearchingInfo(keyword, slop, positiveOnly, negativeOnly);
