@@ -10,15 +10,15 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.Objects;
 
-public class UI_Helper {
+public class HelperUI {
 
     private final WebDriver driver;
     private final WebDriverWait wait;
     private final Actions actions;
-    private static final Logger log = LoggerFactory.getLogger(UI_Helper.class);
+    private static final Logger log = LoggerFactory.getLogger(HelperUI.class);
 
 
-    public UI_Helper (WebDriver driver, WebDriverWait wait) {
+    public HelperUI(WebDriver driver, WebDriverWait wait) {
         this.driver = driver;
         this.wait = wait;
         this.actions = new Actions(driver);

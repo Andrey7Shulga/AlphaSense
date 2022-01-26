@@ -8,7 +8,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import services.ApiHelper;
+import services.HelperAPI;
 import services.ApiSteps;
 
 import java.util.Collection;
@@ -19,12 +19,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class AlphaSenseApiTest {
 
     private ApiSteps apiSteps;
-    private ApiHelper apiHelper;
+    private HelperAPI apiHelper;
 
 
     @BeforeEach
     void beforeTest() {
-        apiHelper = new ApiHelper();
+        apiHelper = new HelperAPI();
         apiSteps = new ApiSteps();
     }
 

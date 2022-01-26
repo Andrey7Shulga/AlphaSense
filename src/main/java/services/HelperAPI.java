@@ -9,9 +9,9 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ApiHelper {
+public class HelperAPI {
 
-    private static final Logger log = LoggerFactory.getLogger(ApiHelper.class);
+    private static final Logger log = LoggerFactory.getLogger(HelperAPI.class);
 
 
     public <T> List<T> jsonArrayToObjectList(String json, Class<T> klass) {

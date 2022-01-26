@@ -20,6 +20,6 @@ Task description:
 
 **Test run:**
 
-In the case the website name might be changed, Test may be run viacommand-line: 
+In the case the website name might be changed, Test may be run via command-line: 
 
 *mvn clean test -DuriPath="rc.alpha-sense.com"*

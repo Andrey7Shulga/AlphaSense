@@ -7,14 +7,14 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import services.UI_Helper;
+import services.HelperUI;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class AlphaSense {
 
-    private final UI_Helper uiHelper;
+    private final HelperUI uiHelper;
     private static final Logger log = LoggerFactory.getLogger(AlphaSense.class);
 
     public final static By searchBox = By.cssSelector("[data-location=CustomSearchBox]");
@@ -25,7 +25,7 @@ public class AlphaSense {
 
 
     public AlphaSense(WebDriver driver, WebDriverWait wait) {
-        uiHelper = new UI_Helper(driver, wait);
+        uiHelper = new HelperUI(driver, wait);
         if (!driver.getTitle().equals("AlphaSense")) {
             throw new IllegalStateException("The loaded page is not Alpha Sense required Page," +
                     " current page title is: " + driver.getTitle());

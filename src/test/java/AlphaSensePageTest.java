@@ -9,7 +9,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import pages.AlphaSense;
-import services.UI_Helper;
+import services.HelperUI;
 
 import java.time.Duration;
 
@@ -19,7 +19,7 @@ public class AlphaSensePageTest {
 
     private WebDriver driver;
     private WebDriverWait wait;
-    private UI_Helper uiHelper;
+    private HelperUI uiHelper;
 
     private static String TEST_URL;
     private final static String WAIT_TIMEOUT = ConfigReader.getInstance().getProperty("waitTimeOut");
@@ -42,7 +42,7 @@ public class AlphaSensePageTest {
         driver = new ChromeDriver();
         wait = new WebDriverWait(driver, Duration.ofSeconds(Long.parseLong(WAIT_TIMEOUT)));
         driver.manage().window().maximize();
-        uiHelper = new UI_Helper(driver, wait);
+        uiHelper = new HelperUI(driver, wait);
         driver.get(TEST_URL);
     }
 
