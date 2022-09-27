@@ -40,11 +40,9 @@ public class AlphaSenseApiTest {
         SearchMainInfo searchMainInfo = apiSteps
                 .getSearchingInfo("AlphaSense", 15, "false", "false")
                 .as(SearchMainInfo.class);
-
         assertThat(searchMainInfo.searchResults.statements.stream()
                 .allMatch(e -> e.accessionNumber.equals(DOC_LABEL)))
                 .isTrue();
-
     }
 
     @Test

@@ -42,7 +42,7 @@ public class AlphaSense {
                 uiHelper.sleep(sleepTimeout);
                 listTwo = uiHelper.getElementsList(searchResults);
             } while (!listOne.equals(listTwo));
-        return listTwo.get(listTwo.size()-1);
+        return listTwo.get(listTwo.size() - 1);
     }
 
     public List<String> getTextFromFoundElementsInViewer () {

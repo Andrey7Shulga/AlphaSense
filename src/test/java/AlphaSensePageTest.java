@@ -6,7 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import pages.AlphaSense;
 import services.HelperUI;
@@ -20,26 +20,24 @@ public class AlphaSensePageTest {
     private WebDriver driver;
     private WebDriverWait wait;
     private HelperUI uiHelper;
-
     private static String TEST_URL;
     private final static String WAIT_TIMEOUT = ConfigReader.getInstance().getProperty("waitTimeOut");
 
     @BeforeAll
     static void beforeClass() {
-        WebDriverManager.chromedriver().setup();
+        WebDriverManager.firefoxdriver().setup();
         String var = System.getProperty("uriPath");
-
         //get a proper URL from the system properties
-        StringBuilder UI_URL = new StringBuilder(ConfigReader.getInstance().getProperty("param_uri"))
-                .append(var)
-                .append("/doc/")
-                .append(ConfigReader.getInstance().getProperty("document"));
-        TEST_URL = var == null ? ConfigReader.getInstance().getProperty("testUI_url") : UI_URL.toString();
+        String UI_URL = ConfigReader.getInstance().getProperty("param_uri") +
+                var +
+                "/doc/" +
+                ConfigReader.getInstance().getProperty("document");
+        TEST_URL = var == null ? ConfigReader.getInstance().getProperty("testUI_url") : UI_URL;
     }
 
     @BeforeEach
      void beforeTest() {
-        driver = new ChromeDriver();
+        driver = new FirefoxDriver();
         wait = new WebDriverWait(driver, Duration.ofSeconds(Long.parseLong(WAIT_TIMEOUT)));
         driver.manage().window().maximize();
         uiHelper = new HelperUI(driver, wait);
@@ -51,7 +49,6 @@ public class AlphaSensePageTest {
         driver.manage().deleteAllCookies();
         driver.quit();
     }
-
 
     @Test
      void checkTheSearchResult () {
@@ -72,5 +69,4 @@ public class AlphaSensePageTest {
         //assert that the expected text is highlighted
         assertThat(alphaSense.getTextFromFoundElementsInViewer()).anyMatch(a -> a.contains(expectedText));
     }
-
 }
