@@ -17,10 +17,8 @@ import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class AlphaSenseApiTest {
-
     private ApiSteps apiSteps;
     private HelperAPI apiHelper;
-
 
     @BeforeEach
     void beforeTest() {
@@ -49,20 +47,16 @@ public class AlphaSenseApiTest {
     @DisplayName("Checking if any search result has a keyWord")
     void getKeyWordSearchingInfoToCheckBodyForKeyWord () {
         String keyWord = "AlphaSense";
-
         JsonNode jsonNode = apiSteps
                 .getSearchingInfo(keyWord, 15, "false", "false")
                 .as(JsonNode.class).at("/searchResults/statements");
-
         //derive a desirable collection
         Collection<Statements> responseList =  apiHelper.jsonArrayToObjectList(jsonNode.toString(), Statements.class);
-
         //filter a collection to have only useful content, without 'TITLE HIT'
         Collection<Statements> filteredList =
                 responseList.stream()
                 .filter(e -> e.collapsedStatements.stream().noneMatch(a -> a.equals("fse1")))
                 .collect(Collectors.toList());
-
         assertThat(filteredList.stream()
                 .allMatch(e -> e.content.toLowerCase().contains(keyWord.toLowerCase())))
                 .isTrue();
