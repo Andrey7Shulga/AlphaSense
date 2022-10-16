@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import pages.AlphaSense;
@@ -25,7 +26,7 @@ public class AlphaSensePageTest {
 
     @BeforeAll
     static void beforeClass() {
-        WebDriverManager.firefoxdriver().setup();
+        WebDriverManager.chromedriver().setup();
         String var = System.getProperty("uriPath");
         //get a proper URL from the system properties
         String UI_URL = ConfigReader.getInstance().getProperty("param_uri") +
@@ -37,7 +38,7 @@ public class AlphaSensePageTest {
 
     @BeforeEach
      void beforeTest() {
-        driver = new FirefoxDriver();
+        driver = new ChromeDriver();
         wait = new WebDriverWait(driver, Duration.ofSeconds(Long.parseLong(WAIT_TIMEOUT)));
         driver.manage().window().maximize();
         uiHelper = new HelperUI(driver, wait);
