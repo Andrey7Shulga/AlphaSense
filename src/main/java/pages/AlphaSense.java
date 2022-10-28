@@ -16,13 +16,11 @@ public class AlphaSense {
 
     private final HelperUI uiHelper;
     private static final Logger log = LoggerFactory.getLogger(AlphaSense.class);
-
     public final static By searchBox = By.cssSelector("[data-location=CustomSearchBox]");
     public final static By highLightedElement = By.cssSelector("span[class='hl']");
     public final static By articleFrame = By.cssSelector("#content-1");
     private final By textFoundElement = By.cssSelector("span[class*='row-blue']");
     private final By searchResults = By.cssSelector("[role=rowgroup] > div");
-
 
     public AlphaSense(WebDriver driver, WebDriverWait wait) {
         uiHelper = new HelperUI(driver, wait);

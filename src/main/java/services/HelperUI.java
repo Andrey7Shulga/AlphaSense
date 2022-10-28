@@ -17,7 +17,6 @@ public class HelperUI {
     private final Actions actions;
     private static final Logger log = LoggerFactory.getLogger(HelperUI.class);
 
-
     public HelperUI(WebDriver driver, WebDriverWait wait) {
         this.driver = driver;
         this.wait = wait;
@@ -94,5 +93,4 @@ public class HelperUI {
             e.printStackTrace();
         }
     }
-
 }

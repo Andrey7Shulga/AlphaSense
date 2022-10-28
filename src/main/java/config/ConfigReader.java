@@ -35,6 +35,4 @@ public class ConfigReader {
         if(baseUrl != null) return baseUrl;
         else throw new RuntimeException("" + property + "is not specified in the configuration properties file.");
     }
-
-
 }

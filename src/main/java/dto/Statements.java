@@ -3,7 +3,6 @@ package dto;
 import java.util.List;
 
 public class Statements {
-
     public String accessionNumber;
     public List<String> collapsedStatements;
     public String content;
@@ -15,5 +14,4 @@ public class Statements {
     public String statementId;
     public Integer statementIndex;
     public Integer statementIndexOffset;
-
 }
