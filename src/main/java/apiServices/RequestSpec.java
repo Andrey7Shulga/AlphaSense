@@ -20,15 +20,15 @@ public class RequestSpec {
         BASE_URI = var == null ? ConfigReader.getInstance().getProperty("base_uri") : PARAM_URI + var;
     }
 
-    public  RequestSpecification baseRequestSpecJson() {
+    public RequestSpecification baseRequestSpecJson() {
         log.info("BASE_URI: {}", BASE_URI);
         return new RequestSpecBuilder()
-                .setRelaxedHTTPSValidation()
-                .setContentType(ContentType.JSON)
-                .setBaseUri(BASE_URI)
-                .addHeader("accept", "application/json")
-                .addFilter(new ResponseLoggingFilter())
-                .addFilter(new RequestLoggingFilter())
-                .build();
+            .setRelaxedHTTPSValidation()
+            .setContentType(ContentType.JSON)
+            .setBaseUri(BASE_URI)
+            .addHeader("accept", "application/json")
+            .addFilter(new ResponseLoggingFilter())
+            .addFilter(new RequestLoggingFilter())
+            .build();
     }
 }

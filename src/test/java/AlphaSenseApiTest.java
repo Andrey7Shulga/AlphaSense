@@ -47,11 +47,11 @@ public class AlphaSenseApiTest {
     @DisplayName("Checking if any search result has a keyWord")
     void getKeyWordSearchingInfoToCheckBodyForKeyWord () {
         String keyWord = "AlphaSense";
-        JsonNode jsonNode = apiSteps
-                .getSearchingInfo(keyWord, 15, "false", "false")
-                .as(JsonNode.class).at("/searchResults/statements");
+        SearchMainInfo searchMainInfo = apiSteps
+            .getSearchingInfo("AlphaSense", 15, "false", "false")
+            .as(SearchMainInfo.class);
         //derive a desirable collection
-        Collection<Statements> responseList =  apiHelper.jsonArrayToObjectList(jsonNode.toString(), Statements.class);
+        Collection<Statements> responseList =  searchMainInfo.searchResults.statements;
         //filter a collection to have only useful content, without 'TITLE HIT'
         Collection<Statements> filteredList =
                 responseList.stream()

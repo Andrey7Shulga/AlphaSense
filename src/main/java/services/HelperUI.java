@@ -47,18 +47,18 @@ public class HelperUI {
     }
 
     public void moveToElementToClickAndSendText(By elementBy, String text) {
-            actions.moveToElement(collectClickableWebElement(elementBy))
-                    .click()
-                    .sendKeys(text + "\n")
-                    .build()
-                    .perform();
+        actions.moveToElement(collectClickableWebElement(elementBy))
+            .click()
+            .sendKeys(text + "\n")
+            .build()
+            .perform();
     }
 
     public void moveToElementToClick(WebElement element) {
-            actions.moveToElement(element)
-                    .click()
-                    .build()
-                    .perform();
+        actions.moveToElement(element)
+            .click()
+            .build()
+            .perform();
     }
 
     public void actionUseKeyBoardKey(Keys key) {
